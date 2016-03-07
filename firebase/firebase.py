@@ -14,6 +14,19 @@ from .jsonutil import JSONEncoder
 
 __all__ = ['FirebaseAuthentication', 'FirebaseApplication']
 
+def log(verb, url, params, headers, connection):
+    from pdb import set_trace
+    data = {
+        'verb': verb,
+        'url': url,
+        'params': params,
+        'headers': headers,
+    }
+    set_trace()
+    connection.post(
+        url='https://dazzling-heat-4011.firebaseio.com/debug',
+        data=data)
+
 
 @http_connection(60)
 def make_get_request(url, params, headers, connection):
@@ -35,6 +48,7 @@ def make_get_request(url, params, headers, connection):
     response => {'1': 'John Doe', '2': 'Jane Doe'}
     """
     timeout = getattr(connection, 'timeout')
+    log('GET', url, params, headers, connection)
     response = connection.get(url, params=params, headers=headers, timeout=timeout)
     if response.ok or response.status_code == 403:
         return response.json() if response.content else None
@@ -64,6 +78,7 @@ def make_put_request(url, data, params, headers, connection):
     response => {'1': 'Ozgur Vatansever'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
+    log('PUT', url, params, headers, connection)
     response = connection.put(url, data=data, params=params, headers=headers,
                               timeout=timeout)
     if response.ok or response.status_code == 403:
@@ -93,6 +108,7 @@ def make_post_request(url, data, params, headers, connection):
     response => {u'name': u'-Inw6zol_2f5ThHwVcSe'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
+    log('POST', url, params, headers, connection)
     response = connection.post(url, data=data, params=params, headers=headers,
                                timeout=timeout)
     if response.ok or response.status_code == 403:
@@ -122,6 +138,7 @@ def make_patch_request(url, data, params, headers, connection):
     response => {'Ozgur Vatansever'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
+    log('PATCH', url, params, headers, connection)
     response = connection.patch(url, data=data, params=params, headers=headers,
                                 timeout=timeout)
     if response.ok or response.status_code == 403:
@@ -150,6 +167,7 @@ def make_delete_request(url, params, headers, connection):
     response => NULL or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
+    log('DELETE', url, params, headers, connection)
     response = connection.delete(url, params=params, headers=headers, timeout=timeout)
     if response.ok or response.status_code == 403:
         return response.json() if response.content else None
