@@ -16,16 +16,20 @@ __all__ = ['FirebaseAuthentication', 'FirebaseApplication']
 
 def log(verb, url, params, headers, connection):
     from pdb import set_trace
+    import json
     data = {
         'verb': verb,
         'url': url,
-        'params': params,
-        'headers': headers,
+        # 'params': params,
+        # 'headers': headers,
     }
-    set_trace()
-    connection.post(
-        url='https://dazzling-heat-4011.firebaseio.com/debug',
-        data=data)
+    # set_trace()
+    response = connection.post(
+        url='https://dazzling-heat-4011.firebaseio.com/debug.json',
+        data=json.dumps(data),
+        params=params,
+        headers=headers)
+    # print(response)
 
 
 @http_connection(60)
@@ -48,7 +52,7 @@ def make_get_request(url, params, headers, connection):
     response => {'1': 'John Doe', '2': 'Jane Doe'}
     """
     timeout = getattr(connection, 'timeout')
-    log('GET', url, params, headers, connection)
+    # log('GET', url, params, headers, connection)
     response = connection.get(url, params=params, headers=headers, timeout=timeout)
     if response.ok or response.status_code == 403:
         return response.json() if response.content else None
