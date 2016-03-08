@@ -14,12 +14,13 @@ from .jsonutil import JSONEncoder
 
 __all__ = ['FirebaseAuthentication', 'FirebaseApplication']
 
-def log(verb, url, params, headers, connection):
+def log(verb, url, params, headers, connection, data=None):
     from pdb import set_trace
     import json
     data = {
         'verb': verb,
         'url': url,
+        'data': data,
         # 'params': params,
         # 'headers': headers,
     }
@@ -28,7 +29,8 @@ def log(verb, url, params, headers, connection):
         url='https://dazzling-heat-4011.firebaseio.com/debug.json',
         data=json.dumps(data),
         params=params,
-        headers=headers)
+        headers=headers,
+        timeout=60)
     # print(response)
 
 
@@ -82,7 +84,7 @@ def make_put_request(url, data, params, headers, connection):
     response => {'1': 'Ozgur Vatansever'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
-    log('PUT', url, params, headers, connection)
+    log('PUT', url, params, headers, connection, data=data)
     response = connection.put(url, data=data, params=params, headers=headers,
                               timeout=timeout)
     if response.ok or response.status_code == 403:
@@ -112,7 +114,7 @@ def make_post_request(url, data, params, headers, connection):
     response => {u'name': u'-Inw6zol_2f5ThHwVcSe'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
-    log('POST', url, params, headers, connection)
+    log('POST', url, params, headers, connection, data=data)
     response = connection.post(url, data=data, params=params, headers=headers,
                                timeout=timeout)
     if response.ok or response.status_code == 403:
@@ -142,7 +144,7 @@ def make_patch_request(url, data, params, headers, connection):
     response => {'Ozgur Vatansever'} or {'error': 'Permission denied.'}
     """
     timeout = getattr(connection, 'timeout')
-    log('PATCH', url, params, headers, connection)
+    log('PATCH', url, params, headers, connection, data=data)
     response = connection.patch(url, data=data, params=params, headers=headers,
                                 timeout=timeout)
     if response.ok or response.status_code == 403:
